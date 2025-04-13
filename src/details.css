@@ -1,0 +1,74 @@
+.details-container {
+    max-width: 960px;
+    margin: 40px auto;
+    padding: 20px;
+    background: white;
+    color: #222;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .back-link {
+    display: inline-block;
+    margin-bottom: 16px;
+    text-decoration: none;
+    color: #3498db;
+    font-size: 14px;
+  }
+  
+  .details-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  @media (min-width: 768px) {
+    .details-content {
+      flex-direction: row;
+    }
+  }
+  
+  .recipe-image {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  .recipe-info {
+    flex: 1;
+  }
+  
+  .recipe-title {
+    font-size: 28px;
+    margin: 0 0 10px;
+  }
+  
+  .recipe-description {
+    font-style: italic;
+    margin-bottom: 20px;
+    color: #666;
+  }
+  
+  .ingredients-list {
+    margin: 0 0 20px 20px;
+    padding: 0;
+    list-style: disc;
+  }
+  
+  .recipe-instructions {
+    white-space: pre-line;
+    line-height: 1.6;
+  }
+  
+  .centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
+    font-size: 18px;
+    color: #666;
+  }
+  
