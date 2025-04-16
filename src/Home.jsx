@@ -9,6 +9,7 @@ function Home() {
   const [recipes, setRecipes] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false); // Renamed state variable
   const [fetchError, setFetchError] = useState(null); // State for fetch errors
+  const [searchTerm, setSearchTerm] = useState(''); // State for the search input
 
   // Wrap the fetch logic in useCallback to avoid recreating it on every render
   const fetchRecipes = useCallback(async () => {
@@ -40,6 +41,12 @@ function Home() {
     margin: 0 auto;
     max-width: 1000px;
   `;
+
+  // Filter recipes based on the search term
+  const filteredRecipes = recipes.filter(recipe =>
+    recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -52,13 +59,25 @@ function Home() {
         <button onClick={() => setIsModalOpen(true)}>Add a Recipe ➕</button>
       </div>
 
+      {/* Add the search input field */}
+      <div style={{ padding: '0 2em', margin: '1em auto', maxWidth: '1000px' }}>
+        <input
+          type="text"
+          placeholder="Search recipes by title..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{ width: '100%', padding: '10px', fontSize: '1rem', boxSizing: 'border-box' }}
+        />
+      </div>
+
       {fetchError && (
         <p style={{ color: "red", textAlign: "center" }}>{fetchError}</p>
       )}
 
       <RecipesContainer>
-        {recipes.length > 0
-          ? recipes.map((recipe) => (
+        {/* Map over filteredRecipes instead of recipes */}
+        {filteredRecipes.length > 0
+          ? filteredRecipes.map((recipe) => (
               <NavLink to={`/recipes/${recipe.id}`} key={recipe.id}>
                 <Recipe
                   title={recipe.title}
@@ -70,8 +89,9 @@ function Home() {
               </NavLink>
             ))
           : !fetchError && (
-              <p>No recipes found.</p>
-            ) // Show message if no recipes and no error
+              // Update the message for no results/no matching results
+              <p>{searchTerm ? 'No matching recipes found.' : 'No recipes found.'}</p>
+            )
         }
       </RecipesContainer>
 
