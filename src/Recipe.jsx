@@ -3,7 +3,7 @@ import React from 'react'
 function Recipe(props) {
 return (
     <div style={{ 
-        // border: '1px solid #ccc', 
+        border: '1px solid #ccc', 
         borderRadius: '10px', 
         padding: '16px', 
         width: '170px',

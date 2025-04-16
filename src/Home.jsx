@@ -12,6 +12,7 @@ async function getRecipes(){
 
 function Home() {
     const [recipes, setRecipes] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false);
     
     useEffect(()=>{
         getRecipes().then((res)=>{
@@ -34,7 +35,13 @@ function Home() {
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5 }}
     >
-        <h1 style={{textAlign: 'center'}}>Recipes</h1>
+        <div className='header'>
+        <h1 >Recipes</h1>
+        <button>Add a Recipe ➕</button>
+
+        </div>
+        {/* <h1 style={{textAlign: 'center'}}>Recipes</h1> */}
+        
         <RecipesContainer>
             {recipes.map( recipe =>
                 <NavLink to={`/recipes/${recipe.id}`}  key={recipe.id}>
