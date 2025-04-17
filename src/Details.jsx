@@ -4,7 +4,7 @@ import { useParams, Link } from 'react-router-dom';
 import './details.css'; // We'll define the styles in this file
 
 async function getDetails(id) {
-  return fetch(`http://localhost:3001/recipes/${id}`)
+  return fetch(`http://${window.location.hostname}:3001/recipes/${id}`)
     .then((res) => res.json())
     .catch((error) => error);
 }

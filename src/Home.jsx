@@ -31,7 +31,12 @@ function Home() {
   const fetchRecipes = useCallback(async () => {
     setFetchError(null); // Clear previous errors
     try {
-      const response = await fetch(`http://localhost:3001/recipes`); // Assuming this is your GET endpoint
+      const API_PORT = 3001;
+      const response = await fetch(
+        `http://${window.location.hostname}:${API_PORT}/recipes`
+      );
+
+      // const response = await fetch(`http://localhost:3001/recipes`); // Assuming this is your GET endpoint
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -97,8 +102,8 @@ function Home() {
           }}
         />
         <div>
-          filters:
-          <div style={{ display: "flex", gap: "40px" }}>
+          <div style={{ display: "flex", gap: "10px", paddingTop: "10px" }}>
+            filters:
             <label className={filters.includes("tacos") ? "check-on" : "check"}>
               Tacos{" "}
               <input
@@ -107,7 +112,9 @@ function Home() {
                 value={"Tacos"}
               />
             </label>
-            <label className={filters.includes("tagine") ? "check-on" : "check"}>
+            <label
+              className={filters.includes("tagine") ? "check-on" : "check"}
+            >
               tagine{" "}
               <input
                 onChange={handle_filters("tagine")}
@@ -123,10 +130,13 @@ function Home() {
                 value={"Pizza"}
               />
             </label>
-            <label className={filters.includes("spaggeti") ? "check-on" : "check"}>
+            <label
+              className={filters.includes("spaggeti") ? "check-on" : "check"}
+            >
               spaggeti
               <input
                 onChange={handle_filters("spaggeti")}
+                // onChange={(e) => {console.log(e)}}
                 type="checkbox"
                 value={"spaggeti"}
               />
@@ -157,6 +167,8 @@ function Home() {
                     ingredients={recipe.ingredients}
                     instructions={recipe.instructions}
                     imageUrl={recipe.imageUrl}
+                    num={recipe.num}
+                    time={recipe.time}
                   />
                 </NavLink>
               </motion.div>
