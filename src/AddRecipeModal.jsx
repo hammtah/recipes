@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import './AddRecipeModal.css'; // We'll create this next
+import React, { useState } from "react";
+import "./AddRecipeModal.css"; // We'll create this next
 
 function AddRecipeModal({ isOpen, onClose, onRecipeAdded }) {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [ingredients, setIngredients] = useState(''); // Input as string, split later
-  const [instructions, setInstructions] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [ingredients, setIngredients] = useState(""); // Input as string, split later
+  const [instructions, setInstructions] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -17,12 +17,14 @@ function AddRecipeModal({ isOpen, onClose, onRecipeAdded }) {
 
     // Basic validation (can be expanded)
     if (!title || !ingredients || !instructions) {
-        setError('Title, Ingredients, and Instructions are required.');
-        setIsLoading(false);
-        return;
+      setError("Title, Ingredients, and Instructions are required.");
+      setIsLoading(false);
+      return;
     }
 
-    const ingredientsArray = ingredients.split('\n').filter(ing => ing.trim() !== ''); // Split by newline and remove empty lines
+    const ingredientsArray = ingredients
+      .split("\n")
+      .filter((ing) => ing.trim() !== ""); // Split by newline and remove empty lines
 
     const newRecipe = {
       title,
@@ -33,10 +35,10 @@ function AddRecipeModal({ isOpen, onClose, onRecipeAdded }) {
     };
 
     try {
-      const response = await fetch('http://localhost:3001/recipes', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3001/recipes", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(newRecipe),
       });
@@ -45,28 +47,27 @@ function AddRecipeModal({ isOpen, onClose, onRecipeAdded }) {
         // Try to get error message from backend if available
         let errorMessage = `HTTP error! status: ${response.status}`;
         try {
-            const errorData = await response.json();
-            errorMessage = errorData.message || errorMessage;
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorMessage;
         } catch (jsonError) {
-            // Ignore if response is not JSON
+          // Ignore if response is not JSON
         }
         throw new Error(errorMessage);
       }
 
       // Clear form and close modal on success
-      setTitle('');
-      setDescription('');
-      setIngredients('');
-      setInstructions('');
-      setImageUrl('');
+      setTitle("");
+      setDescription("");
+      setIngredients("");
+      setInstructions("");
+      setImageUrl("");
       if (onRecipeAdded) {
         onRecipeAdded(); // Notify parent component
       }
       onClose(); // Close the modal
-
     } catch (err) {
-      console.error('Failed to add recipe:', err);
-      setError(err.message || 'Failed to add recipe. Please try again.');
+      console.error("Failed to add recipe:", err);
+      setError(err.message || "Failed to add recipe. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -128,12 +129,19 @@ function AddRecipeModal({ isOpen, onClose, onRecipeAdded }) {
               onChange={(e) => setImageUrl(e.target.value)}
             />
           </div>
+          <div className="form-group">
+            <img
+              src={imageUrl}
+              alt="the pic will be loaded here"
+              style={{ maxWidth: "100%", borderRadius: "10px" }}
+            />
+          </div>
 
           {error && <p className="error-message">{error}</p>}
 
           <div className="modal-actions">
             <button type="submit" disabled={isLoading}>
-              {isLoading ? 'Adding...' : 'Add Recipe'}
+              {isLoading ? "Adding..." : "Add Recipe"}
             </button>
             <button type="button" onClick={onClose} disabled={isLoading}>
               Cancel

@@ -127,10 +127,12 @@ function Home() {
               spaggeti
               <input
                 onChange={handle_filters("spaggeti")}
+                // onChange={(e) => {console.log(e)}}
                 type="checkbox"
                 value={"spaggeti"}
               />
             </label>
+            
           </div>
           {/* .forEach(element => {} */}
           {/* }); */}
