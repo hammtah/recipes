@@ -48,3 +48,32 @@ code {
     transition: background-color 0.3s ease-in-out;
   }
 }
+
+
+input[type="checkbox"] {
+  display: none;
+}
+.check{
+  background-color: #9dd49e;
+  color: white;
+  padding: 8px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  text-align: center;
+  display: flex;
+  border-radius: 5px;
+  cursor: pointer;
+
+}
+
+.check-on {
+  background-color: #559b57;
+  color: white;
+  padding: 8px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  text-align: center;
+  display: flex;
+  border-radius: 5px;
+  cursor: pointer;
+}
