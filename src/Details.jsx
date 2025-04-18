@@ -9,6 +9,14 @@ async function getDetails(id) {
     .catch((error) => error);
 }
 
+async function deleteRecipe(id) {
+  return fetch(`http://${window.location.hostname}:3001/recipes/${id}`, {
+    method: 'DELETE',
+  })
+    .then((res) => res.json())
+    .catch((error) => error);
+}
+
 function Details() {
   const [details, setDetails] = useState(null);
   const { id } = useParams();
@@ -35,6 +43,20 @@ function Details() {
       transition={{ duration: 0.5 }}
     >
       <Link to="/recipes" className="back-link">← Back to Recipes</Link>
+      {/* <Link to="/recipes" className="back-link">delete this item</Link> */}
+      {/* delete this recipe button */}
+      <button
+        className="delete-button"
+        onClick={() => {
+          deleteRecipe(id).then(() => {
+            window.location.href = '/recipes';
+          });}}
+      >
+        Delete Recipe
+      </button>
+      
+        
+
 
       <div className="details-content">
         <img src={details.imageUrl} alt={details.title} className="recipe-image" />

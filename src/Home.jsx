@@ -1,42 +1,35 @@
-import React, { useState, useEffect, useCallback } from "react"; // Added useCallback
+import React, { useState, useEffect } from "react";
 import Recipe from "./Recipe";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
-import AddRecipeModal from "./AddRecipeModal"; // Import the modal component
-import "./AddRecipeModal.css"; // Import the modal CSS
+import AddRecipeModal from "./AddRecipeModal";
+import "./AddRecipeModal.css";
 
 function Home() {
   const [recipes, setRecipes] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Renamed state variable
-  const [fetchError, setFetchError] = useState(null); // State for fetch errors
-  const [searchTerm, setSearchTerm] = useState(""); // State for the search input
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [fetchError, setFetchError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState([]);
-  console.log(filters.length);
-  filters.forEach((element) => {
-    console.log(element);
-  });
 
-  const handle_filters = (filter) => {
-    return (e) => {
-      if (e.target.checked) {
-        setFilters((prev) => [...prev, filter]);
-      } else {
-        setFilters((prev) => prev.filter((f) => f !== filter));
-      }
-    };
+  const filterOptions = ["tacos", "tagine", "Pizza", "spaggeti","beef","chicken"];
+
+  const handle_filters = (filter) => (e) => {
+    if (e.target.checked) {
+      setFilters((prev) => [...prev, filter]);
+    } else {
+      setFilters((prev) => prev.filter((f) => f !== filter));
+    }
   };
 
-  // Wrap the fetch logic in useCallback to avoid recreating it on every render
-  const fetchRecipes = useCallback(async () => {
-    setFetchError(null); // Clear previous errors
+  const fetchRecipes = async () => {
+    setFetchError(null);
     try {
       const API_PORT = 3001;
       const response = await fetch(
         `http://${window.location.hostname}:${API_PORT}/recipes`
       );
-
-      // const response = await fetch(`http://localhost:3001/recipes`); // Assuming this is your GET endpoint
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -45,13 +38,13 @@ function Home() {
     } catch (error) {
       console.error("Failed to fetch recipes:", error);
       setFetchError("Failed to load recipes. Please try again later.");
-      setRecipes([]); // Clear recipes on error
+      setRecipes([]);
     }
-  }, []); // Empty dependency array means this function is created once
+  };
 
   useEffect(() => {
-    fetchRecipes(); // Fetch recipes on initial mount
-  }, [fetchRecipes]); // Depend on fetchRecipes
+    fetchRecipes();
+  }, []);
 
   const RecipesContainer = styled.div`
     padding: 2em;
@@ -63,7 +56,6 @@ function Home() {
     max-width: 1000px;
   `;
 
-  // Filter recipes based on the search term
   const filteredRecipes = recipes.filter(
     (recipe) =>
       recipe.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
@@ -83,11 +75,9 @@ function Home() {
     >
       <div className="header">
         <h1>Recipes</h1>
-        {/* Add onClick handler to the button */}
         <button onClick={() => setIsModalOpen(true)}>Add a Recipe ➕</button>
       </div>
 
-      {/* Add the search input field */}
       <div style={{ padding: "0 2em", margin: "1em auto", maxWidth: "1000px" }}>
         <input
           type="text"
@@ -101,50 +91,21 @@ function Home() {
             boxSizing: "border-box",
           }}
         />
-        <div>
-          <div style={{ display: "flex", gap: "10px", paddingTop: "10px" }}>
-            filters:
-            <label className={filters.includes("tacos") ? "check-on" : "check"}>
-              Tacos{" "}
-              <input
-                onChange={handle_filters("tacos")}
-                type="checkbox"
-                value={"Tacos"}
-              />
-            </label>
+        <div style={{ display: "flex", gap: "10px", paddingTop: "10px" }}>
+          filters:
+          {filterOptions.map((filter) => (
             <label
-              className={filters.includes("tagine") ? "check-on" : "check"}
+              key={filter}
+              className={filters.includes(filter) ? "check-on" : "check"}
             >
-              tagine{" "}
+              {filter}{" "}
               <input
-                onChange={handle_filters("tagine")}
                 type="checkbox"
-                value={"Tagine"}
+                onChange={handle_filters(filter)}
+                checked={filters.includes(filter)}
               />
             </label>
-            <label className={filters.includes("Pizza") ? "check-on" : "check"}>
-              pizza{" "}
-              <input
-                onChange={handle_filters("Pizza")}
-                type="checkbox"
-                value={"Pizza"}
-              />
-            </label>
-            <label
-              className={filters.includes("spaggeti") ? "check-on" : "check"}
-            >
-              spaggeti
-              <input
-                onChange={handle_filters("spaggeti")}
-                // onChange={(e) => {console.log(e)}}
-                type="checkbox"
-                value={"spaggeti"}
-              />
-            </label>
-            
-          </div>
-          {/* .forEach(element => {} */}
-          {/* }); */}
+          ))}
         </div>
       </div>
 
@@ -153,42 +114,36 @@ function Home() {
       )}
 
       <RecipesContainer>
-        {/* Map over filteredRecipes instead of recipes */}
-        {filteredRecipes.length > 0
-          ? filteredRecipes.map((recipe) => (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                <NavLink to={`/recipes/${recipe.id}`} key={recipe.id}>
-                  <Recipe
-                    title={recipe.title}
-                    description={recipe.description}
-                    ingredients={recipe.ingredients}
-                    instructions={recipe.instructions}
-                    imageUrl={recipe.imageUrl}
-                    num={recipe.num}
-                    time={recipe.time}
-                  />
-                </NavLink>
-              </motion.div>
-            ))
-          : !fetchError && (
-              // Update the message for no results/no matching results
-              <p>
-                {searchTerm
-                  ? "No matching recipes found."
-                  : "No recipes found."}
-              </p>
-            )}
+        {filteredRecipes.length > 0 ? (
+          filteredRecipes.map((recipe) => (
+            <motion.div
+              key={recipe.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <NavLink to={`/recipes/${recipe.id}`}>
+                <Recipe
+                  title={recipe.title}
+                  description={recipe.description}
+                  ingredients={recipe.ingredients}
+                  instructions={recipe.instructions}
+                  imageUrl={recipe.imageUrl}
+                  num={recipe.num}
+                  time={recipe.time}
+                />
+              </NavLink>
+            </motion.div>
+          ))
+        ) : !fetchError ? (
+          <p>{searchTerm ? "No matching recipes found." : "No recipes found."}</p>
+        ) : null}
       </RecipesContainer>
 
-      {/* Render the modal outside the container */}
       <AddRecipeModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onRecipeAdded={fetchRecipes} // Pass the fetch function to refresh list
+        onRecipeAdded={fetchRecipes}
       />
     </motion.div>
   );
