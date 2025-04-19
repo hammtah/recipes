@@ -6,6 +6,8 @@ function AddRecipeModal({ isOpen, onClose, onRecipeAdded }) {
   const [description, setDescription] = useState("");
   const [ingredients, setIngredients] = useState(""); // Input as string, split later
   const [instructions, setInstructions] = useState("");
+  const [num, setNum] = useState("");
+  const [time, settime] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +34,8 @@ function AddRecipeModal({ isOpen, onClose, onRecipeAdded }) {
       ingredients: ingredientsArray,
       instructions,
       imageUrl,
+      num,
+      time,
     };
 
     try {
@@ -61,6 +65,8 @@ function AddRecipeModal({ isOpen, onClose, onRecipeAdded }) {
       setIngredients("");
       setInstructions("");
       setImageUrl("");
+      setNum("");
+      settime("");
       if (onRecipeAdded) {
         onRecipeAdded(); // Notify parent component
       }
@@ -119,6 +125,43 @@ function AddRecipeModal({ isOpen, onClose, onRecipeAdded }) {
               required
               rows="5"
             />
+          </div>
+          <div
+            className="form-group"
+            style={{
+              display: "flex",
+              gap: "12px",
+            }}
+          >
+            <div
+              style={{
+                flex: "1",
+              }}
+            >
+              <label htmlFor="num">Peaple</label>
+              <input
+                type="text"
+                name=""
+                id="num"
+                value={num}
+                onChange={(e) => {
+                  setNum(e.target.value);
+                }}
+              />
+            </div>
+
+            <div style={{ flex: "1" }}>
+              <label htmlFor="time">duration</label>
+              <input
+                type="text"
+                name=""
+                id="time"
+                value={time}
+                onChange={(e) => {
+                  settime(e.target.value);
+                }}
+              />
+            </div>
           </div>
           <div className="form-group">
             <label htmlFor="imageUrl">Image URL</label>
